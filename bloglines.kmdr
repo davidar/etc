@@ -1,0 +1,280 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>MainWindow</class>
+<widget class="Dialog">
+    <property name="name">
+        <cstring>MainWindow</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Bloglines</string>
+    </property>
+    <property name="associations" stdset="0">
+        <stringlist>
+            <string></string>
+            <string>@setGlobal(email, @Input.text("Bloglines email", "Please enter your email address"))
+@setGlobal(pass, @Input.password("Bloglines password"))
+
+@notifierTimer.execute
+@update.execute</string>
+            <string></string>
+        </stringlist>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="Label">
+                    <property name="name">
+                        <cstring>Label2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Unread articles:</string>
+                    </property>
+                </widget>
+                <widget class="Label">
+                    <property name="name">
+                        <cstring>unreadArticles</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>???</string>
+                    </property>
+                    <property name="populationText">
+                        <string></string>
+                    </property>
+                    <property name="associations" stdset="0">
+                        <stringlist>
+                            <string></string>
+                        </stringlist>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>331</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="ScriptObject">
+                    <property name="name">
+                        <cstring>update</cstring>
+                    </property>
+                    <property name="associations" stdset="0">
+                        <stringlist>
+                            <string>@unreadArticles.setText(@exec(curl "http://rpc.bloglines.com/update?user="@global(email)"&amp;ver=1" 2&gt;/dev/null | awk -F'|' '{print $2;}'))
+@exec(kdialog --passivepopup "Unread articles: "@unreadArticles.text 5 &amp;)
+@subList.setText(@exec(curl -u @global(email):@global(pass) "http://rpc.bloglines.com/listsubs" | grep BloglinesSubId | sed 's/.*title="\([^"]*\)".*BloglinesSubId="\([^"]*\)".*BloglinesUnread="\([^"]*\)".*/\1 (\3)	\2/'))
+</string>
+                        </stringlist>
+                    </property>
+                </widget>
+                <widget class="Timer">
+                    <property name="name">
+                        <cstring>notifierTimer</cstring>
+                    </property>
+                    <property name="associations" stdset="0">
+                        <stringlist>
+                            <string></string>
+                        </stringlist>
+                    </property>
+                    <property name="interval">
+                        <number>60000</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QSplitter">
+            <property name="name">
+                <cstring>Splitter4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="TreeWidget">
+                <column>
+                    <property name="text">
+                        <string>Title</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizeable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>BloglinesSubId</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizeable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <property name="name">
+                    <cstring>subList</cstring>
+                </property>
+                <property name="associations" stdset="0">
+                    <stringlist>
+                        <string></string>
+                    </stringlist>
+                </property>
+                <property name="pathSeparator">
+                    <string>blahblahblah</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>Layout11</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="TextBrowser">
+                        <property name="name">
+                            <cstring>browser</cstring>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                        <property name="populationText">
+                            <string>@setGlobal(subId, @exec(echo "@subList.selection" | awk -F "\t" '{print $2;}'))
+&lt;a href="http://www.bloglines.com/myblogs_display?sub=@global(subId)"&gt;Link&lt;/a&gt;
+@exec(curl -u @global(email):@global(pass) "http://rpc.bloglines.com/getitems?n=0&amp;s="@global(subId) | grep -e '&lt;description&gt;&lt;![[]CDATA[[]' -e '&lt;title&gt;' | sed 's_&lt;description&gt;&lt;[!][[]CDATA[[]__' | sed 's_[]][]]&gt;&lt;/description&gt;__' | sed 's_.*&lt;title&gt;\(.*\)&lt;/title&gt;.*_&lt;p&gt;&lt;b&gt;Title: \1&lt;/b&gt;&lt;/p&gt;_')</string>
+                        </property>
+                        <property name="associations" stdset="0">
+                            <stringlist>
+                                <string></string>
+                            </stringlist>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout10</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>121</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="ExecButton">
+                                <property name="name">
+                                    <cstring>markRead</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Mark as read</string>
+                                </property>
+                                <property name="associations" stdset="0">
+                                    <stringlist>
+                                        <string>@exec(curl -I -u @global(email):@global(pass) "http://rpc.bloglines.com/getitems?n=1&amp;s="@global(subId))
+@update.execute
+</string>
+                                    </stringlist>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>notifierTimer</sender>
+        <signal>finished()</signal>
+        <receiver>update</receiver>
+        <slot>execute()</slot>
+    </connection>
+    <connection>
+        <sender>subList</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>browser</receiver>
+        <slot>populate()</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
