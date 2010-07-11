@@ -1,0 +1,17 @@
+# wireframe cube, rotates by self
+200->I    # number of frames in a full rotation
+ViewWindow -3,3,1,-1.5,1.5,1:AxesOff
+0->A:2pi/I->I
+While 1
+ cos A->Z:0.5sqrt(2)sin A->H
+ Z->X:ZHsqrt(2)->Y
+ For A->B To A+3pi/2 Step pi/2
+  X->S:-sin B->X
+  Y->T:ZS->Y
+  F-Line X,Y+H,S,T+H    # top edge
+  F-Line X,Y-H,S,T-H    # bottom edge
+  F-Line X,Y+H,X,Y-H    # vertical edge
+  A+I->A
+ Next
+ Cls
+WhileEnd

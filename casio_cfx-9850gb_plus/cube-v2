@@ -1,0 +1,29 @@
+# solid-faced cube, manual rotation
+24->I    # number of frames in a full rotation
+ViewWindow -3,3,1,-1.5,1.5,1:AxesOff
+2piRan#->A:2piRan#-pi->C    # set random orientation
+2pi/I->I:sqrt(2)/2->R    # R = 1/2 side-length
+While 1
+ C<-pi/2=>-pi/2->C
+ C>pi/2=>pi/2->C
+ Rcos C->H    # projected displacement between top and bottom of cube
+ cos A->X
+ sin Asin C->Y
+ sin A<R->Z    # boolean visibility of vertical edge
+ Cls
+ For A+pi/2->B To A+2pi Step pi/2    # iterate through remaining 3 vertical edges
+  X->S:cos B->X
+  Y->T:sin Bsin C->Y
+  Z->U:sin B<R->Z
+  C>=0 Or (C<0 And Z And U)=>F-Line X,Y+H,S,T+H    # top edge
+  C<=0 Or (C>0 And Z And U)=>F-Line X,Y-H,S,T-H    #bottom edge
+  Z=>F-Line X,Y+H,X,Y-H    #vertical edge
+ Next
+ Do
+  Getkey->G
+ LpWhile G!=27 And G!=28 And G!=37 And G!=38
+ G=28=>C-I->C    # rotate up
+ G=37=>C+I->C    # rotate down
+ G=38=>A-I->A    # rotate left
+ G=27=>A+I->A    # rotate right
+WhileEnd

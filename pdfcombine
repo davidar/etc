@@ -1,0 +1,7 @@
+#!/bin/sh
+# pdfcombine out.pdf in1.pdf in2.pdf ...
+
+set -ex
+OUTFILE="$1"
+shift
+gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE="$OUTFILE" -dBATCH "$@"
