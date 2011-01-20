@@ -1,0 +1,10 @@
+#!/bin/sh
+
+MEM=`free -m | sed -n 3p | tr -s ' ' | cut -d ' ' -f 3`
+STAT=`mpstat 1 1 | sed -n 5p | tr -s ' '`
+USR=`echo $STAT | cut -d ' ' -f 3`
+NICE=`echo $STAT | cut -d ' ' -f 4`
+SYS=`echo $STAT | cut -d ' ' -f 5`
+CPU=`echo $USR + $NICE + $SYS | bc`
+
+echo "${CPU}% ${MEM}M"
